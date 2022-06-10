@@ -2,7 +2,11 @@
 
 OS/compiler-independent "sleep" Fortran subroutine
 
-We provide two examples.
+The simplest robust way to implement Fortran "sleep(milliseconds)" in a standard way is using C++ as in
+[sleep.cpp](./src/sleep.cpp)
+and
+[sleep.f90](./src/sleep.f90)
 
-* [src/fortran](./src/fortran) simple `bind(C)` with no custom C code. Works for many applications
-* [src/c_fortran](./src/c_fortran/) uses `bind(C)` with error handling code for advanced users.
+Two other methods are shown.
+POSIX nanosleep in [sleep.c](./src/sleep.c) takes noticeably more code than C++.
+Simply binding to C functions is less robust in [reference](./src/reference/).
