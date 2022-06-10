@@ -1,5 +1,5 @@
 module sleep_std
-use, intrinsic :: iso_c_binding, only : C_INT, C_LONG, C_PTR, C_NULL_PTR
+use, intrinsic :: iso_c_binding, only : C_INT, C_LONG
 implicit none (type, external)
 
 private
@@ -21,9 +21,10 @@ integer(C_INT), value, intent(in) :: usec
 end function
 
 integer(C_INT) function nanosleep(request, remainder) bind(C)
-import C_INT, C_PTR, timespec
+!! this works on Linux, but freezes on MacOS and MinGW
+import C_INT, timespec
 type(timespec), intent(in) :: request
-type(C_PTR), intent(inout) :: remainder
+type(timespec), intent(out) :: remainder
 end function
 end interface
 
@@ -33,18 +34,15 @@ subroutine sleep(millisec)
 integer, intent(in) :: millisec
 integer(C_INT) :: ierr
 
-type(timespec) :: request
-type(C_PTR) :: null
-! ierr = usleep(int(millisec * 1000, C_INT))
-! if (ierr/=0) error stop 'problem with usleep() system call'
+! type(timespec) :: request, remainder
+ierr = usleep(int(millisec * 1000, C_INT))
+if (ierr/=0) error stop 'problem with usleep() system call'
 
-null = C_NULL_PTR
-request%tv_sec = int(millisec / 1000, C_INT)
-request%tv_nsec = int(modulo(millisec, 1000), C_LONG) * 1000000
+! request%tv_sec = int(millisec / 1000, C_INT)
+! request%tv_nsec = int(modulo(millisec, 1000), C_LONG) * 1000000
 
-print *, 'request: ', request%tv_sec, ' ', request%tv_nsec
-
-ierr = nanosleep(request, null)
+! ierr = nanosleep(request, remainder)
+! if (ierr/=0) error stop 'problem with nanosleep() system call'
 
 end subroutine sleep
 
