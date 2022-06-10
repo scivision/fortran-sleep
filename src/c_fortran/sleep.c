@@ -35,20 +35,22 @@ void c_sleep(int* milliseconds)
   int ierr = nanosleep(&t, NULL);
 
   if (ierr != 0){
-    if (errno == EINTR){
-      fprintf(stderr, "usleep interrupted\n");
-    }
-    else if(errno == EINVAL){
-      fprintf(stderr, "usleep bad milliseconds value\n");
-      exit(EINVAL);
-    }
-      else if(errno == EFAULT){
-      fprintf(stderr, "usleep bad milliseconds value\n");
-      exit(EFAULT);
-    }
-    else{
-      fprintf(stderr, "usleep error\n");
-      exit(1);
+    switch(errno){
+      case EINTR:
+        fprintf(stderr, "nanosleep() interrupted\n");
+        break;
+      case EINVAL:
+        fprintf(stderr, "nanosleep() bad milliseconds value\n");
+        exit(EINVAL);
+      case EFAULT:
+        fprintf(stderr, "nanosleep() bad milliseconds value\n");
+        exit(EFAULT);
+      case ENOSYS:
+        fprintf(stderr, "nanosleep() not supported on this system\n");
+        exit(ENOSYS);
+      default:
+        fprintf(stderr, "nanosleep() error\n");
+        exit(1);
     }
   }
 }
