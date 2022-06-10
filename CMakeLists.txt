@@ -9,8 +9,9 @@ include(cmake/options.cmake)
 # --- Fortran bind(C) without specific C code - no error handling
 
 add_library(sleep_basic
-$<IF:$<BOOL:${WIN32}>,src/fortran/windows.f90,src/fortran/unix.f90>
+$<IF:$<BOOL:${WIN32}>,src/fortran/windows.f90,src/fortran/posix.f90>
 )
+# NOTE: MinGW compiles, but hangs on nanosleep.
 set_target_properties(sleep_basic PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/b/include)
 target_include_directories(sleep_basic PUBLIC
 $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/b/include>
