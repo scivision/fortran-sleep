@@ -25,7 +25,7 @@ call system_clock(count=tic)
 call sleep(millisec)
 call system_clock(count=toc)
 
-t_ms = (toc-tic) * 1000. / trate
+t_ms = real(toc-tic) * 1000. / real(trate)
 
 if (t_ms < 0.5 * millisec) error stop 'actual sleep time was too short'
 if (t_ms > 2 * millisec) error stop 'actual sleep time was too long'

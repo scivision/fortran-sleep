@@ -21,7 +21,7 @@ $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
 $<INSTALL_INTERFACE:include>
 )
 
-add_executable(main_cpp app/bind.f90)
+add_executable(main_cpp app/main.f90)
 set_target_properties(main_cpp PROPERTIES LINKER_LANGUAGE Fortran)  # Intel oneAPI Linux needs this
 target_link_libraries(main_cpp PRIVATE sleep_cpp)
 add_test(NAME CPPsleep COMMAND main_cpp 150)
@@ -34,7 +34,7 @@ $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
 $<INSTALL_INTERFACE:include>
 )
 
-add_executable(main_c app/bind.f90)
+add_executable(main_c app/main.f90)
 target_link_libraries(main_c PRIVATE sleep_c)
 add_test(NAME Csleep COMMAND main_c 150)
 
@@ -50,7 +50,7 @@ $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/reference/include>
 $<INSTALL_INTERFACE:include>
 )
 
-add_executable(main_ref app/bind.f90)
+add_executable(main_ref app/main.f90)
 target_link_libraries(main_ref PRIVATE sleep_bind)
 add_test(NAME SleepReference COMMAND main_ref 150)
 
