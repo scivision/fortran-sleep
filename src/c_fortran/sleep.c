@@ -27,12 +27,12 @@ void c_sleep(int* milliseconds)
 
   //int ierr = usleep(*milliseconds * 1000);
 
-  struct timespec t, r;
+  struct timespec t;
 
   t.tv_sec = *milliseconds / 1000;
   t.tv_nsec = (*milliseconds % 1000) * 1000000;
 
-  int ierr = nanosleep(&t, &r);
+  int ierr = nanosleep(&t, NULL);
 
   if (ierr != 0){
     if (errno == EINTR){
