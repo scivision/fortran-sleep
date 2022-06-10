@@ -1,0 +1,5 @@
+if(CMAKE_SYSTEM_NAME STREQUAL Linux)
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_POSITION_INDEPENDENT_CODE true)
+  endif()
+endif()

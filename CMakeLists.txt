@@ -7,6 +7,7 @@ LANGUAGES C CXX Fortran
 enable_testing()
 
 include(cmake/options.cmake)
+include(cmake/compilers.cmake)
 
 # --- RECOMMENDED: sleep() using C++ stdlib
 

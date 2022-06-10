@@ -1,4 +1,6 @@
-# Fortran sleep()
+# Fortran standard sleep()
+
+[![ci_cmake](https://github.com/scivision/fortran-sleep/actions/workflows/ci_cmake.yml/badge.svg)](https://github.com/scivision/fortran-sleep/actions/workflows/ci_cmake.yml)
 
 OS/compiler-independent "sleep" Fortran subroutine
 
