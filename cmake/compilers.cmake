@@ -1,10 +1,10 @@
-if(CMAKE_SYSTEM_NAME STREQUAL Linux)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_POSITION_INDEPENDENT_CODE true)
   endif()
 endif()
 
-if(CMAKE_C_COMPILER_ID STREQUAL GNU)
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
   add_compile_options($<$<COMPILE_LANGUAGE:C>:-Werror=implicit-function-declaration>)
 elseif(CMAKE_C_COMPILER_ID MATCHES "(Clang|Intel)")
   add_compile_options(
