@@ -2,7 +2,7 @@ program sleep_demo
 
 use, intrinsic :: iso_fortran_env, only : int64
 
-use sleep_std, only : sleep
+use sleep_std, only : sleep_ms
 
 implicit none (type, external)
 
@@ -22,7 +22,7 @@ read(argv, '(i6)') millisec
 if (millisec<=0) error stop "please specify positive milliseconds to sleep"
 
 call system_clock(count=tic)
-call sleep(millisec)
+call sleep_ms(millisec)
 call system_clock(count=toc)
 
 t_ms = real(toc-tic) * 1000. / real(trate)

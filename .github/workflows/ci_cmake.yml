@@ -1,25 +1,28 @@
-name: ci_cmake
+name: ci
+
+env:
+  HOMEBREW_NO_INSTALL_CLEANUP: 1
 
 on:
   push:
     paths:
-      - "**/*.f90"
-      - "**/*.cpp"
-      - "**/*.c"
+      - "**.c"
+      - "**.cpp"
+      - "**.f90"
       - "**/CMakeLists.txt"
-      - "**/*.cmake"
-      - ".github/workflows/ci_cmake.yml"
+      - "**.cmake"
+      - ".github/workflows/ci.yml"
 
 
 jobs:
 
   linux-gcc:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 15
 
     strategy:
       matrix:
-        gcc-version: [7, 8, 9, 10, 11]
+        gcc-version: [9, 10, 11]
 
     env:
       CC: gcc-${{ matrix.gcc-version }}
@@ -27,25 +30,19 @@ jobs:
       FC: gfortran-${{ matrix.gcc-version }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - name: install compilers
-      run: |
-        sudo apt update
-        sudo apt install gcc-${{ matrix.gcc-version }} g++-${{ matrix.gcc-version }} gfortran-${{ matrix.gcc-version }}
 
-    - run: cmake -Bbuild
-    - run: cmake --build build
-    - run: ctest --test-dir build -V
+    - run: cmake --workflow --preset default
 
 
   linux-clang:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 15
 
     strategy:
       matrix:
-        clang-version: ["6.0", 7, 8, 9, 10]
+        clang-version: [12, 13, 14]
 
     env:
       CC: clang-${{ matrix.clang-version }}
@@ -55,14 +52,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: install compilers
-      run: |
-        sudo apt update
-        sudo apt install clang-${{ matrix.clang-version }}
-
-    - run: cmake -Bbuild
-    - run: cmake --build build
-    - run: ctest --test-dir build -V
+    - run: cmake --workflow --preset default
 
   mac:
     runs-on: macos-latest
@@ -71,20 +61,20 @@ jobs:
 
     env:
       HOMEBREW_NO_INSTALL_CLEANUP: 1
+      FC: gfortran-11
 
     steps:
     - uses: actions/checkout@v3
 
-    - run: brew reinstall gcc
-
-    - run: cmake -Bbuild
-    - run: cmake --build build --parallel
-    - run: ctest --test-dir build -V
+    - run: cmake --workflow --preset default
 
   windows:
     runs-on: windows-latest
     needs: linux-gcc
     timeout-minutes: 15
+
+    env:
+      CMAKE_GENERATOR: "MinGW Makefiles"
 
     steps:
     - uses: msys2/setup-msys2@v2
@@ -98,6 +88,4 @@ jobs:
 
     - uses: actions/checkout@v3
 
-    - run: cmake -B build -G "MinGW Makefiles"
-    - run: cmake --build build --parallel
-    - run: ctest --test-dir build -V
+    - run: cmake --workflow --preset default

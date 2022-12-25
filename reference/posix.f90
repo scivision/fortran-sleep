@@ -3,7 +3,7 @@ use, intrinsic :: iso_c_binding, only : C_INT, C_LONG
 implicit none (type, external)
 
 private
-public :: sleep
+public :: sleep_ms
 
 
 type, bind(C) :: timespec
@@ -30,7 +30,7 @@ end interface
 
 contains
 
-subroutine sleep(millisec)
+subroutine sleep_ms(millisec)
 integer, intent(in) :: millisec
 integer(C_INT) :: ierr
 
@@ -44,6 +44,6 @@ if (ierr/=0) error stop 'problem with usleep() system call'
 ! ierr = nanosleep(request, remainder)
 ! if (ierr/=0) error stop 'problem with nanosleep() system call'
 
-end subroutine sleep
+end subroutine sleep_ms
 
 end module sleep_std

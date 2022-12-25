@@ -3,7 +3,7 @@ use, intrinsic :: iso_c_binding, only : c_int, c_long
 implicit none (type, external)
 
 private
-public :: sleep
+public :: sleep_ms
 
 interface
 subroutine winsleep(dwMilliseconds) bind (C, name='Sleep')
@@ -17,11 +17,11 @@ end interface
 
 contains
 
-subroutine sleep(millisec)
+subroutine sleep_ms(millisec)
 integer, intent(in) :: millisec
 
 call winsleep(int(millisec, c_long))
 
-end subroutine sleep
+end subroutine sleep_ms
 
 end module sleep_std
