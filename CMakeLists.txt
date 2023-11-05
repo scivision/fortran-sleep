@@ -1,4 +1,9 @@
-cmake_minimum_required(VERSION 3.14...3.25)
+cmake_minimum_required(VERSION 3.15...3.28)
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  message(FATAL_ERROR "use out-of-source build
+  cmake -Bbuild")
+endif()
 
 project(FortranSleep
 LANGUAGES C CXX Fortran
@@ -8,7 +13,6 @@ enable_testing()
 
 set(CMAKE_CXX_STANDARD 11)
 
-include(cmake/options.cmake)
 include(cmake/compilers.cmake)
 
 # --- RECOMMENDED: sleep_ms() using C++ stdlib
@@ -44,6 +48,9 @@ add_test(NAME Csleep COMMAND main_c 150)
 
 add_executable(main_ref app/main.f90
 $<IF:$<BOOL:${MSVC}>,reference/windows.f90,reference/posix.f90>)
+
 add_test(NAME SleepReference COMMAND main_ref 150)
 
 set_property(TEST SleepReference Csleep CPPsleep PROPERTY TIMEOUT 3)
+
+file(GENERATE OUTPUT .gitignore CONTENT "*")
