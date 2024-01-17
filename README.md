@@ -7,7 +7,7 @@ OS/compiler-independent "sleep" Fortran subroutine
 The simplest robust way to implement Fortran "sleep_ms(milliseconds)" in a standard way is using C++ as in
 [sleep.cpp](./src/sleep.cpp)
 and
-[sleep.f90](./src/sleep.f90)
+[sleep_std.f90](./src/sleep_std.f90)
 
 Two other methods are shown.
 POSIX nanosleep in [sleep.c](./src/sleep.c) takes noticeably more code than C++.
