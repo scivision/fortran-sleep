@@ -16,51 +16,48 @@ on:
 
 jobs:
 
-  linux-gcc:
+  linux:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     strategy:
       matrix:
-        gcc-version: [9, 10, 11, 12, 13]
+        c: [
+          {cc: gcc-9, cxx: g++-9, fc: gfortran-9},
+          {cc: gcc-10, cxx: g++-10, fc: gfortran-10},
+          {cc: gcc-11, cxx: g++-11, fc: gfortran-11},
+          {cc: gcc-12, cxx: g++-12, fc: gfortran-12},
+          {cc: gcc-13, cxx: g++-13, fc: gfortran-13},
+          {cc: clang-13, cxx: clang++-13, fc: gfortran},
+          {cc: clang-14, cxx: clang++-14, fc: gfortran},
+          {cc: clang-15, cxx: clang++-15, fc: gfortran},
+          ]
 
     env:
-      CC: gcc-${{ matrix.gcc-version }}
-      CXX: g++-${{ matrix.gcc-version }}
-      FC: gfortran-${{ matrix.gcc-version }}
+      CC: ${{ matrix.c.cc }}
+      CXX: ${{ matrix.c.cxx }}
+      FC: ${{ matrix.c.fc }}
 
     steps:
     - uses: actions/checkout@v4
 
     - run: cmake --workflow --preset default
 
-
-  linux-clang:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    strategy:
-      matrix:
-        clang-version: [13, 14, 15]
-
-    env:
-      CC: clang-${{ matrix.clang-version }}
-      CXX: clang++-${{ matrix.clang-version }}
-      FC: gfortran
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - run: cmake --workflow --preset default
 
   mac:
     runs-on: macos-latest
-    needs: linux-clang
-    timeout-minutes: 5
+
+    strategy:
+      matrix:
+        c: [
+          {cc: gcc-13, cxx: g++-13, fc: gfortran-13},
+          {cc: clang, cxx: clang++, fc: gfortran-13}
+          ]
 
     env:
-      HOMEBREW_NO_INSTALL_CLEANUP: 1
-      FC: gfortran-13
+      CC: ${{ matrix.c.cc }}
+      CXX: ${{ matrix.c.cxx }}
+      FC: ${{ matrix.c.fc }}
 
     steps:
     - uses: actions/checkout@v4
@@ -69,7 +66,7 @@ jobs:
 
   windows:
     runs-on: windows-latest
-    needs: linux-gcc
+    needs: linux
     timeout-minutes: 15
 
     env:
