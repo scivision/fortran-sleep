@@ -11,4 +11,4 @@ and
 
 Two other methods are shown.
 POSIX nanosleep in [sleep.c](./src/sleep.c) takes noticeably more code than C++.
-Simply binding to C functions is less robust in [reference](./src/reference/).
+Simply binding to C functions is less robust in [reference/](./reference/).
