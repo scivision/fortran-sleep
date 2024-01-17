@@ -1,6 +1,7 @@
 # Fortran standard sleep_ms()
 
 [![ci_cmake](https://github.com/scivision/fortran-sleep/actions/workflows/ci_cmake.yml/badge.svg)](https://github.com/scivision/fortran-sleep/actions/workflows/ci_cmake.yml)
+[![oneapi-linux](https://github.com/scivision/fortran-sleep/actions/workflows/oneapi-linux.yml/badge.svg)](https://github.com/scivision/fortran-sleep/actions/workflows/oneapi-linux.yml)
 
 OS/compiler-independent "sleep" Fortran subroutine
 
