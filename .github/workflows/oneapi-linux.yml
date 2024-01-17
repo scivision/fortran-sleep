@@ -1,0 +1,36 @@
+name: oneapi-linux
+
+env:
+  CTEST_NO_TESTS_ACTION: error
+  CMAKE_BUILD_PARALLEL_LEVEL: 4
+  CMAKE_BUILD_TYPE: Release
+
+on:
+  push:
+    paths:
+      - "**.f90"
+      - "**.F90"
+      - "**.c"
+      - "**.cpp"
+      - "**.cmake"
+      - "**/CMakeLists.txt"
+      - ".github/workflows/oneapi-linux.yml"
+
+
+jobs:
+
+  linux:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - uses: fortran-lang/setup-fortran@v1
+      id: setup-fortran
+      with:
+        compiler: intel
+        version: '2023.2'
+
+    - uses: actions/checkout@v4
+
+    - run: cmake --workflow --preset default
