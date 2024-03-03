@@ -1,8 +1,4 @@
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-  include(CheckPIESupported)
-  check_pie_supported()
-  set(CMAKE_POSITION_INDEPENDENT_CODE true)
-endif()
+if(PROJECT_IS_TOP_LEVEL)
 
 if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang|^Intel")
   add_compile_options(
@@ -25,5 +21,7 @@ add_compile_options(
 "$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<CONFIG:Debug,RelWithDebInfo>>:-fcheck=all;-Werror=array-bounds>"
 "$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<CONFIG:Release>>:-fno-backtrace>"
 )
+
+endif()
 
 endif()

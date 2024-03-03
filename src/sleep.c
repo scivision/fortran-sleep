@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-extern void c_sleep(int);
+#include "csleep.h"
+
 
 #ifdef _MSC_VER
 

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15...3.28)
+cmake_minimum_required(VERSION 3.15...3.29)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   message(FATAL_ERROR "use out-of-source build
@@ -15,6 +15,10 @@ set(CMAKE_CXX_STANDARD 11)
 
 include(cmake/compilers.cmake)
 
+include(CheckPIESupported)
+check_pie_supported()
+set(CMAKE_POSITION_INDEPENDENT_CODE true)
+
 # --- RECOMMENDED: sleep_ms() using C++ stdlib
 
 add_library(sleep_std OBJECT src/sleep_std.f90)
@@ -22,7 +26,7 @@ set_property(TARGET sleep_std PROPERTY Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_
 
 add_library(sleep_cpp src/sleep.cpp $<TARGET_OBJECTS:sleep_std>)
 target_include_directories(sleep_cpp PUBLIC
-$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include;${CMAKE_CURRENT_SOURCE_DIR}/src>"
 $<INSTALL_INTERFACE:include>
 )
 
@@ -35,7 +39,7 @@ add_test(NAME CPPsleep COMMAND main_cpp 150)
 
 add_library(sleep_c src/sleep.c $<TARGET_OBJECTS:sleep_std>)
 target_include_directories(sleep_c PUBLIC
-$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include;${CMAKE_CURRENT_SOURCE_DIR}/src>"
 $<INSTALL_INTERFACE:include>
 )
 
@@ -54,3 +58,5 @@ add_test(NAME SleepReference COMMAND main_ref 150)
 set_property(TEST SleepReference Csleep CPPsleep PROPERTY TIMEOUT 3)
 
 file(GENERATE OUTPUT .gitignore CONTENT "*")
+
+install(FILES src/csleep.h TYPE INCLUDE)
