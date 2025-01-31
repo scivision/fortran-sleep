@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15...3.29)
+cmake_minimum_required(VERSION 3.15...3.31)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   message(FATAL_ERROR "use out-of-source build
@@ -11,13 +11,9 @@ LANGUAGES C CXX Fortran
 
 enable_testing()
 
-set(CMAKE_CXX_STANDARD 11)
+include(CheckSymbolExists)
 
-include(cmake/compilers.cmake)
-
-include(CheckPIESupported)
-check_pie_supported()
-set(CMAKE_POSITION_INDEPENDENT_CODE true)
+check_symbol_exists(nanosleep "time.h" HAVE_NANOSLEEP)
 
 # --- RECOMMENDED: sleep_ms() using C++ stdlib
 
@@ -25,6 +21,7 @@ add_library(sleep_std OBJECT src/sleep_std.f90)
 set_property(TARGET sleep_std PROPERTY Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include)
 
 add_library(sleep_cpp src/sleep.cpp $<TARGET_OBJECTS:sleep_std>)
+target_compile_features(sleep_cpp PUBLIC cxx_std_11)
 target_include_directories(sleep_cpp PUBLIC
 "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include;${CMAKE_CURRENT_SOURCE_DIR}/src>"
 $<INSTALL_INTERFACE:include>
@@ -38,6 +35,7 @@ add_test(NAME CPPsleep COMMAND main_cpp 150)
 # --- sleep_ms() using time.h C -- more code but also robust/standard
 
 add_library(sleep_c src/sleep.c $<TARGET_OBJECTS:sleep_std>)
+target_compile_definitions(sleep_c PRIVATE $<$<BOOL:${HAVE_NANOSLEEP}>:HAVE_NANOSLEEP>)
 target_include_directories(sleep_c PUBLIC
 "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include;${CMAKE_CURRENT_SOURCE_DIR}/src>"
 $<INSTALL_INTERFACE:include>
