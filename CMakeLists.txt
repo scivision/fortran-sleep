@@ -28,7 +28,9 @@ $<INSTALL_INTERFACE:include>
 )
 
 add_executable(main_cpp app/main.f90)
-set_property(TARGET main_cpp PROPERTY LINKER_LANGUAGE Fortran)  # Intel oneAPI Linux needs this
+if(LINUX AND CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM|NVHPC")
+  set_property(TARGET main_cpp PROPERTY LINKER_LANGUAGE Fortran)
+endif()
 target_link_libraries(main_cpp PRIVATE sleep_cpp)
 add_test(NAME CPPsleep COMMAND main_cpp 150)
 
