@@ -2,7 +2,6 @@ name: oneapi-linux
 
 env:
   CTEST_NO_TESTS_ACTION: error
-  CMAKE_BUILD_PARALLEL_LEVEL: 4
   CMAKE_BUILD_TYPE: Release
 
 on:
@@ -29,8 +28,8 @@ jobs:
       id: setup-fortran
       with:
         compiler: intel
-        version: '2023.2'
+        version: '2025.0'
 
     - uses: actions/checkout@v4
 
-    - run: cmake --workflow --preset default
+    - run: cmake --workflow default
